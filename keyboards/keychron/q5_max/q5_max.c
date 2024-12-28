@@ -28,16 +28,16 @@
 #endif
 
 
-#ifdef DIP_SWITCH_ENABLE
-bool dip_switch_update_kb(uint8_t index, bool active) {
-    if (index == 0) {
-        default_layer_set(1UL << (active ? 2 : 0));
-    }
-    dip_switch_update_user(index, active);
+// #ifdef DIP_SWITCH_ENABLE
+// bool dip_switch_update_kb(uint8_t index, bool active) {
+//     if (index == 0) {
+//         default_layer_set(1UL << (active ? 2 : 0));
+//     }
+//     dip_switch_update_user(index, active);
 
-    return true;
-}
-#endif
+//     return true;
+// }
+// #endif
 
 void keyboard_post_init_kb(void) {
 #ifdef LK_WIRELESS_ENABLE
