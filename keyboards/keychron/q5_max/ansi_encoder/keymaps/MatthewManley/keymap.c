@@ -81,13 +81,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         break;
     case REVIVE:
         if (record->event.pressed) {
-            register_code(KC_LEFT_CTRL);
-            tap_code(KC_UP);
-            tap_code(KC_DOWN);
-            tap_code(KC_RIGHT);
-            tap_code(KC_LEFT);
-            tap_code(KC_UP);
-            unregister_code(KC_LEFT_CTRL);
+            SEND_STRING_DELAY(
+                SS_DOWN(KC_LEFT_CTRL)
+                SS_TAP(KC_UP)
+                SS_TAP(KC_DOWN)
+                SS_TAP(KC_RIGHT)
+                SS_TAP(KC_LEFT)
+                SS_TAP(KC_UP)
+                SS_UP(KC_LEFT_CTRL), 20);
         }
         break;
     }
