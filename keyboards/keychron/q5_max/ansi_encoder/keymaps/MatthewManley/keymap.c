@@ -19,6 +19,9 @@
 
 enum layers {
     BASE,
+    NO_NUMPAD,
+    NO_MOD,
+    NO_KB,
     FN,
 };
 
@@ -27,7 +30,19 @@ enum custom_keycodes {
     UNDO,
     REDO,
     REVIVE,
+    SET_ALL,
+    SET_NPD,
+    SET_MOD,
+    SET_NKB,
 };
+
+    // [TRANSPARENT] = LAYOUT_ansi_101(
+    //     _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  _______,  _______,  _______,    _______,
+    //     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  _______,  _______,  _______,    _______,
+    //     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  _______,  _______,  _______,
+    //     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,            _______,  _______,  _______,  _______,    _______,
+    //     _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,  _______,            _______,  _______,  _______,
+    //     _______,  _______,  _______,                                _______,                                _______,  _______,    _______,  _______,  _______,  _______,            _______,  _______,    _______),
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -39,18 +54,45 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LSFT,            KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,              KC_RSFT,  KC_UP,              KC_P1,    KC_P2,    KC_P3,
         KC_LCTL,  KC_LWIN,  KC_LALT,                                KC_SPC,                                 KC_F14,   MO(FN),     KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT,            KC_P0,    KC_PDOT,    KC_PENT),
 
+    [NO_NUMPAD] = LAYOUT_ansi_101(
+        _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,            _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,
+        _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,  _______,            XXXXXXX,  XXXXXXX,  XXXXXXX,
+        _______,  _______,  _______,                                _______,                                _______,  _______,    _______,  _______,  _______,  _______,            XXXXXXX,  XXXXXXX,    XXXXXXX),
+
+    [NO_MOD] = LAYOUT_ansi_101(
+        _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            XXXXXXX,  _______,  _______,  _______,    _______,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            XXXXXXX,  _______,  _______,  _______,    _______,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            XXXXXXX,  _______,  _______,  _______,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,            XXXXXXX,  _______,  _______,  _______,    _______,
+        _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,  XXXXXXX,            _______,  _______,  _______,
+        _______,  _______,  _______,                                _______,                                _______,  _______,    _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,            _______,  _______,    _______),
+
+    [NO_KB] = LAYOUT_ansi_101(
+        XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,  XXXXXXX,            _______,  _______,  _______,  _______,    _______,
+        XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,  XXXXXXX,            _______,  _______,  _______,  _______,    _______,
+        XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,  XXXXXXX,            _______,  _______,  _______,  _______,
+        XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,              XXXXXXX,            _______,  _______,  _______,  _______,    _______,
+        XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,              XXXXXXX,  _______,            _______,  _______,  _______,
+        XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                XXXXXXX,  _______,    XXXXXXX,  _______,  _______,  _______,            _______,  _______,    _______),
+
     [FN] = LAYOUT_ansi_101(
-        XXXXXXX,            KC_F13,   KC_F14,   KC_F15,   KC_F16,   KC_F17,   KC_F18,   KC_F19,   KC_F20,   KC_F21,   KC_F22,     KC_F23,   KC_F24,             XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,
-        XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,  XXXXXXX,            KC_INS,   XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,
+        XXXXXXX,            KC_F13,   KC_F14,   KC_F15,   KC_F16,   KC_F17,   KC_F18,   KC_F19,   KC_F20,   KC_F21,   KC_F22,     KC_F23,   KC_F24,             XXXXXXX,  PB_1,     PB_2,     PB_3,    XXXXXXX,
+        XXXXXXX,  SET_ALL,  SET_NPD,  SET_MOD,  SET_NKB,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,  XXXXXXX,            KC_INS,   XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,
         RGB_TOG,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,  XXXXXXX,            KC_HOME,  XXXXXXX,  XXXXXXX,  XXXXXXX,
         XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,              XXXXXXX,            KC_END,   XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,
         XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  BAT_LVL,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  EMAIL,                XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,
-        XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                XXXXXXX,  XXXXXXX,    REVIVE,   XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX,    XXXXXXX),
+        XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                KC_F14,   _______,    REVIVE,   XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX,    XXXXXXX),
 };
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [BASE] = {ENCODER_CCW_CW(UNDO, REDO)},
+    [NO_NUMPAD]   = {ENCODER_CCW_CW(XXXXXXX, XXXXXXX)},
+    [NO_MOD]   = {ENCODER_CCW_CW(XXXXXXX, XXXXXXX)},
+    [NO_KB]   = {ENCODER_CCW_CW(XXXXXXX, XXXXXXX)},
     [FN]   = {ENCODER_CCW_CW(XXXXXXX, XXXXXXX)},
 };
 #endif // ENCODER_MAP_ENABLE
@@ -82,13 +124,41 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case REVIVE:
         if (record->event.pressed) {
             SEND_STRING_DELAY(
-                SS_DOWN(KC_LEFT_CTRL)
-                SS_TAP(KC_UP)
-                SS_TAP(KC_DOWN)
-                SS_TAP(KC_RIGHT)
-                SS_TAP(KC_LEFT)
-                SS_TAP(KC_UP)
-                SS_UP(KC_LEFT_CTRL), 20);
+                SS_DOWN(X_LEFT_CTRL)
+                SS_TAP(X_UP)
+                SS_TAP(X_DOWN)
+                SS_TAP(X_RIGHT)
+                SS_TAP(X_LEFT)
+                SS_TAP(X_UP)
+                SS_UP(X_LEFT_CTRL), 20);
+        }
+        break;
+    case SET_ALL:
+        if (record->event.pressed) {
+            layer_off(NO_NUMPAD);
+            layer_off(NO_MOD);
+            layer_off(NO_KB);
+        }
+        break;
+    case SET_NPD:
+        if (record->event.pressed) {
+            layer_on(NO_NUMPAD);
+            layer_off(NO_MOD);
+            layer_off(NO_KB);
+        }
+        break;
+    case SET_MOD:
+        if (record->event.pressed) {
+            layer_on(NO_NUMPAD);
+            layer_on(NO_MOD);
+            layer_off(NO_KB);
+        }
+        break;
+    case SET_NKB:
+        if (record->event.pressed) {
+            layer_on(NO_NUMPAD);
+            layer_on(NO_MOD);
+            layer_on(NO_KB);
         }
         break;
     }
@@ -96,3 +166,54 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     return true;
 };
+
+// When hitting FN + the three buttons above the keyboard simultaneously, put the kb into flash mode
+const uint16_t PROGMEM test_combo1[] = {PB_1, PB_2, PB_3, COMBO_END};
+
+combo_t key_combos[] = {
+    COMBO(test_combo1, QK_BOOTLOADER),
+};
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (IS_LAYER_ON(FN)) {
+        rgb_matrix_set_color(18, RGB_WHITE);
+        rgb_matrix_set_color(19, RGB_WHITE);
+        rgb_matrix_set_color(20, RGB_WHITE);
+        rgb_matrix_set_color(21, RGB_WHITE);
+        rgb_matrix_set_color(36, RGB_WHITE);
+        rgb_matrix_set_color(81, RGB_WHITE);
+        return false;
+    }
+    bool is_no_kb_on = IS_LAYER_ON(NO_KB);
+    bool is_no_mod_on = IS_LAYER_ON(NO_MOD);
+    bool is_no_numpad_on = IS_LAYER_ON(NO_NUMPAD);
+    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+        for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+            uint8_t index = g_led_config.matrix_co[row][col];
+
+            if (index >= led_min && index < led_max && index != NO_LED) {
+                if (is_no_kb_on && keymap_key_to_keycode(NO_KB, (keypos_t){col,row}) == XXXXXXX) {
+                    rgb_matrix_set_color(index, RGB_RED);
+                    continue;
+                }
+                if (is_no_mod_on && keymap_key_to_keycode(NO_MOD, (keypos_t){col,row}) == XXXXXXX) {
+                    rgb_matrix_set_color(index, RGB_RED);
+                    continue;
+                }
+                if (is_no_numpad_on && keymap_key_to_keycode(NO_NUMPAD, (keypos_t){col,row}) == XXXXXXX) {
+                    rgb_matrix_set_color(index, RGB_RED);
+                    continue;
+                }
+            }
+        }
+    }
+    
+    led_t led_state = host_keyboard_led_state();
+    if (!is_no_numpad_on && led_state.num_lock) {
+        rgb_matrix_set_color(32, RGB_WHITE);
+    }
+    if (!is_no_kb_on && led_state.caps_lock) {
+        rgb_matrix_set_color(55, RGB_WHITE);
+    }
+    return false;
+}
