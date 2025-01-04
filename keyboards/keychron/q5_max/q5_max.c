@@ -16,15 +16,8 @@
 
 #include "quantum.h"
 #include "keychron_task.h"
-#ifdef FACTORY_TEST_ENABLE
-#    include "factory_test.h"
-#    include "keychron_common.h"
-#endif
-#ifdef LK_WIRELESS_ENABLE
-#    include "lkbt51.h"
-#    include "wireless.h"
-#    include "keychron_wireless_common.h"
-#    include "battery.h"
+#ifdef ENCODER_ENABLE
+    #include "keychron_common.h"
 #endif
 
 
@@ -40,13 +33,6 @@
 // #endif
 
 void keyboard_post_init_kb(void) {
-#ifdef LK_WIRELESS_ENABLE
-    palSetLineMode(P2P4_MODE_SELECT_PIN, PAL_MODE_INPUT);
-    palSetLineMode(BT_MODE_SELECT_PIN, PAL_MODE_INPUT);
-
-    lkbt51_init(false);
-    wireless_init();
-#endif
 
 #ifdef ENCODER_ENABLE
     encoder_cb_init();
@@ -54,9 +40,3 @@ void keyboard_post_init_kb(void) {
 
     keyboard_post_init_user();
 }
-
-#ifdef LK_WIRELESS_ENABLE
-bool lpm_is_kb_idle(void) {
-    return !factory_reset_indicating();
-}
-#endif

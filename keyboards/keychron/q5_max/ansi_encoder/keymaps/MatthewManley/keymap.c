@@ -16,6 +16,7 @@
 
 #include QMK_KEYBOARD_H
 #include "keychron_common.h"
+#include "raw_hid.h"
 
 enum layers {
     BASE,
@@ -34,15 +35,16 @@ enum custom_keycodes {
     SET_NPD,
     SET_MOD,
     SET_NKB,
+    EFFECTS,
 };
 
-    // [TRANSPARENT] = LAYOUT_ansi_101(
-    //     _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  _______,  _______,  _______,    _______,
-    //     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  _______,  _______,  _______,    _______,
-    //     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  _______,  _______,  _______,
-    //     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,            _______,  _______,  _______,  _______,    _______,
-    //     _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,  _______,            _______,  _______,  _______,
-    //     _______,  _______,  _______,                                _______,                                _______,  _______,    _______,  _______,  _______,  _______,            _______,  _______,    _______),
+// [TRANSPARENT] = LAYOUT_ansi_101(
+//     _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  _______,  _______,  _______,    _______,
+//     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  _______,  _______,  _______,    _______,
+//     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,  _______,  _______,  _______,
+//     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,            _______,  _______,  _______,  _______,    _______,
+//     _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,              _______,  _______,            _______,  _______,  _______,
+//     _______,  _______,  _______,                                _______,                                _______,  _______,    _______,  _______,  _______,  _______,            _______,  _______,    _______),
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -79,11 +81,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                XXXXXXX,  _______,    XXXXXXX,  _______,  _______,  _______,            _______,  _______,    _______),
 
     [FN] = LAYOUT_ansi_101(
-        XXXXXXX,            KC_F13,   KC_F14,   KC_F15,   KC_F16,   KC_F17,   KC_F18,   KC_F19,   KC_F20,   KC_F21,   KC_F22,     KC_F23,   KC_F24,             XXXXXXX,  PB_1,     PB_2,     PB_3,    XXXXXXX,
+        XXXXXXX,            KC_F13,   KC_F14,   KC_F15,   KC_F16,   KC_F17,   KC_F18,   KC_F19,   KC_F20,   KC_F21,   KC_F22,     KC_F23,   KC_F24,             XXXXXXX,  PB_1,     PB_2,     PB_3,       EFFECTS,
         XXXXXXX,  SET_ALL,  SET_NPD,  SET_MOD,  SET_NKB,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,  XXXXXXX,            KC_INS,   XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,
         RGB_TOG,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,  XXXXXXX,            KC_HOME,  XXXXXXX,  XXXXXXX,  XXXXXXX,
         XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,              XXXXXXX,            KC_END,   XXXXXXX,  XXXXXXX,  XXXXXXX,    XXXXXXX,
-        XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  BAT_LVL,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  EMAIL,                XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,
+        XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  EMAIL,                XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,
         XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                KC_F14,   _______,    REVIVE,   XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX,    XXXXXXX),
 };
 
@@ -96,6 +98,115 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [FN]   = {ENCODER_CCW_CW(XXXXXXX, XXXXXXX)},
 };
 #endif // ENCODER_MAP_ENABLE
+
+const char* effectNames[] = {
+    "OFF\0",
+    "SOLID_COLOR\0",
+	"ALPHAS_MODS\0",
+	"GRADIENT_UP_DOWN\0",
+	"GRADIENT_LEFT_RIGHT\0",
+	"BREATHING\0",
+	"BAND_SAT\0",
+	"BAND_VAL\0",
+	"BAND_PINWHEEL_SAT\0",
+	"BAND_PINWHEEL_VAL\0",
+	"BAND_SPIRAL_SAT\0",
+	"BAND_SPIRAL_VAL\0",
+	"CYCLE_ALL\0",
+	"CYCLE_LEFT_RIGHT\0",
+	"CYCLE_UP_DOWN\0",
+	"RAINBOW_MOVING_CHEVRON\0",
+	"CYCLE_OUT_IN\0",
+	"CYCLE_OUT_IN_DUAL\0",
+	"CYCLE_PINWHEEL\0",
+	"CYCLE_SPIRAL\0",
+	"DUAL_BEACON\0",
+	"RAINBOW_BEACON\0",
+	"RAINBOW_PINWHEELS\0",
+	"FLOWER_BLOOMING\0",
+	"RAINDROPS\0",
+	"JELLYBEAN_RAINDROPS\0",
+	"HUE_BREATHING\0",
+	"HUE_PENDULUM\0",
+	"HUE_WAVE\0",
+	"PIXEL_RAIN\0",
+	"PIXEL_FLOW\0",
+	"PIXEL_FRACTAL\0",
+	"TYPING_HEATMAP\0",
+	"DIGITAL_RAIN\0",
+	"SOLID_REACTIVE_SIMPLE\0",
+	"SOLID_REACTIVE\0",
+	"SOLID_REACTIVE_WIDE\0",
+	"SOLID_REACTIVE_MULTIWIDE\0",
+	"SOLID_REACTIVE_CROSS\0",
+	"SOLID_REACTIVE_MULTICROSS\0",
+	"SOLID_REACTIVE_NEXUS\0",
+	"SOLID_REACTIVE_MULTINEXUS\0",
+	"SPLASH\0",
+	"MULTISPLASH\0",
+	"SOLID_SPLASH\0",
+	"SOLID_MULTISPLASH\0",
+	"STARLIGHT\0",
+	"STARLIGHT_DUAL_SAT\0",
+	"STARLIGHT_DUAL_HUE\0",
+	"RIVERFLOW\0",
+};
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    uint8_t response[32] = {0};
+    switch (data[0]) {
+        // Set mode
+        case 0x01:
+            if (data[1] >= 0 && data[1] < RGB_MATRIX_EFFECT_MAX) {
+                rgb_matrix_mode_noeeprom(data[1]);
+                response[0] = 0x01;
+                raw_hid_send(response, length);
+            }
+            else
+            {
+                response[0] = 0x00;
+                raw_hid_send(response, length);
+            }
+            break;
+        // Get Max Mode
+        case 0x02:
+            response[0] = 0x01;
+            response[1] = RGB_MATRIX_EFFECT_MAX;
+            raw_hid_send(response, length);
+            break;
+        // Get Mode Name
+        case 0x03:
+            if (data[1] >= 0 && data[1] < RGB_MATRIX_EFFECT_MAX) {
+                response[0] = 0x01;
+                // copy effect name to response
+                strncpy((char *)&response[1], effectNames[data[1]], 30);
+                raw_hid_send(response, length);
+            }
+            else
+            {
+                response[0] = 0x00;
+                raw_hid_send(response, length);
+            }
+            break;
+        // set hsv
+        case 0x04:
+            rgb_matrix_sethsv_noeeprom(data[1], data[2], data[3]);
+            response[0] = 0x06;
+            raw_hid_send(response, length);
+            break;
+        // reset to default
+        case 0x05:
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_DEFAULT_MODE);
+            response[0] = 0x01;
+            raw_hid_send(response, length);
+            break;
+        default:
+            response[0] = 0xFF;
+            response[1] = data[0];
+            raw_hid_send(response, length);
+            break;
+    }
+}
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -125,12 +236,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
             SEND_STRING_DELAY(
                 SS_DOWN(X_LEFT_CTRL)
-                SS_TAP(X_UP)
-                SS_TAP(X_DOWN)
-                SS_TAP(X_RIGHT)
-                SS_TAP(X_LEFT)
-                SS_TAP(X_UP)
-                SS_UP(X_LEFT_CTRL), 20);
+                SS_DOWN(X_UP)
+                SS_UP(X_UP)
+                SS_DOWN(X_DOWN)
+                SS_UP(X_DOWN)
+                SS_DOWN(X_RIGHT)
+                SS_UP(X_RIGHT)
+                SS_DOWN(X_LEFT)
+                SS_UP(X_LEFT)
+                SS_DOWN(X_UP)
+                SS_UP(X_UP)
+                SS_UP(X_LEFT_CTRL), 30);
         }
         break;
     case SET_ALL:
@@ -162,7 +278,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         break;
     }
-    
+
 
     return true;
 };
@@ -173,15 +289,23 @@ const uint16_t PROGMEM test_combo1[] = {PB_1, PB_2, PB_3, COMBO_END};
 combo_t key_combos[] = {
     COMBO(test_combo1, QK_BOOTLOADER),
 };
+int count = 0;
+uint8_t hue = 0;
+int leds[] = {18, 19, 20, 21, 36, 82};
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     if (IS_LAYER_ON(FN)) {
-        rgb_matrix_set_color(18, RGB_WHITE);
-        rgb_matrix_set_color(19, RGB_WHITE);
-        rgb_matrix_set_color(20, RGB_WHITE);
-        rgb_matrix_set_color(21, RGB_WHITE);
-        rgb_matrix_set_color(36, RGB_WHITE);
-        rgb_matrix_set_color(81, RGB_WHITE);
+        HSV hsv = {hue, 255, 255};
+        RGB rgb = hsv_to_rgb(hsv);
+        for (int i = 0; i < sizeof(leds) / sizeof(leds[0]); i++) {
+            rgb_matrix_set_color(leds[i], rgb.r, rgb.g, rgb.b);
+        }
+
+        count++;
+        if (count > 2) {
+            count = 0;
+            hue++;
+        }
         return false;
     }
     bool is_no_kb_on = IS_LAYER_ON(NO_KB);
@@ -207,7 +331,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             }
         }
     }
-    
+
     led_t led_state = host_keyboard_led_state();
     if (!is_no_numpad_on && led_state.num_lock) {
         rgb_matrix_set_color(32, RGB_WHITE);
@@ -216,4 +340,12 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         rgb_matrix_set_color(55, RGB_WHITE);
     }
     return false;
+}
+
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  debug_enable=true;
+//   debug_matrix=true;
+  //debug_keyboard=true;
+  //debug_mouse=true;
 }

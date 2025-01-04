@@ -21,7 +21,6 @@
 #include "battery.h"
 #include "raw_hid.h"
 #include "report_buffer.h"
-#include "factory_test.h"
 
 extern void factory_test_send(uint8_t* payload, uint8_t length);
 
